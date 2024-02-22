@@ -3,8 +3,8 @@ import 'package:nutrimatch_mobile/screens/welcome_screen.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main() async {
   //Ensuring FlutterBinding
@@ -16,7 +16,7 @@ Future<void> main() async {
   );
 
   //Setting Firebase Emulator
-  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  // await FirebaseAuth.instance.useAuthEmulator('192.168.0.30', 9099);
 
   //Setting SysemUIOverlay
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

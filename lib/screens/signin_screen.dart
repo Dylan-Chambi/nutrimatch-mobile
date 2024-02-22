@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:nutrimatch_mobile/screens/signup_screen.dart';
 import 'package:nutrimatch_mobile/components/custom_scaffold.dart';
-
-import '../theme/theme.dart';
+import 'package:nutrimatch_mobile/theme/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -234,7 +235,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             minWidth: 50.0,
                             height: 50.0,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                await signInWithGoogle();
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
                                 elevation: 5.0,
@@ -305,5 +308,26 @@ class _SignInScreenState extends State<SignInScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    debugPrint(
+        "Google Auth: ${googleAuth?.accessToken}, ${googleAuth?.idToken}");
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
