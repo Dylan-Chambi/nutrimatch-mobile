@@ -102,37 +102,83 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              UserAccountsDrawerHeader(
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                  image: AssetImage('lib/assets/images/drawer_header.jpg'),
+                  fit: BoxFit.cover,
+                )),
+                accountName: Text(_user?.displayName ?? ''),
+                accountEmail: Text(_user?.email ?? ''),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: NetworkImage(_user?.photoURL ?? ''),
+                ),
+              ),
+              ListTile(
+                title: const Text('Profile'),
+                leading: const Icon(Icons.person),
+                onTap: () {},
+              ),
+              ListTile(
+                title: const Text('Sign Out'),
+                leading: const Icon(Icons.logout),
+                onTap: () async {
+                  await signOut();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Expanded(
         child: Column(
           children: [
-            SafeArea(
-              child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(22),
-                child: Stack(
-                  alignment: Alignment.center,
-                  fit: StackFit.loose,
-                  children: [
-                    Positioned(
-                      left: 0,
-                      child: Icon(
-                        Icons.sort,
-                        size: 30,
-                        color: lightColorScheme.primary,
-                      ),
+            AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: Icon(
+                      Icons.sort,
+                      size: 30,
+                      color: lightColorScheme.primary,
                     ),
-                    Center(
-                      child: Text(
-                        'NutriMatch',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: lightColorScheme.primary,
-                        ),
-                      ),
-                    ),
-                  ],
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  );
+                },
+              ),
+              title: Text(
+                'NutriMatch',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: lightColorScheme.primary,
+                ),
+              ),
+              centerTitle: true,
+            ),
+            // add a subtitle with the following text: "Your recommendations" aligned to the left
+            const SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Your recommendations',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[600],
+                  ),
                 ),
               ),
             ),
