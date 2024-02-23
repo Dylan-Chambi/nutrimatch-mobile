@@ -70,23 +70,31 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _getFoodRecommendations() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? idToken = prefs.getString('idToken');
-    if (idToken == null) {
-      return;
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? idToken = prefs.getString('idToken');
+      if (idToken == null) {
+        return;
+      }
+
+      List<FoodRecommendation> foodRecommendations =
+          await BackendAPI.getFoodRecommendations(idToken);
+
+      setState(() {
+        _foodRecommendations = foodRecommendations;
+        _searchFoodRecommendations = foodRecommendations;
+        _isLoading = false;
+      });
+    } catch (e) {
+      log('Error: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
-
-    List<FoodRecommendation> foodRecommendations =
-        await BackendAPI.getFoodRecommendations(idToken);
-
-    setState(() {
-      _foodRecommendations = foodRecommendations;
-      _searchFoodRecommendations = foodRecommendations;
-      _isLoading = false;
-    });
   }
 
   onFoodRecommendationSearch(String query) {
