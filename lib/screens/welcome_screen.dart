@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nutrimatch_mobile/screens/home._page.dart';
+import 'package:nutrimatch_mobile/screens/home_page.dart';
 import 'package:nutrimatch_mobile/screens/signin_screen.dart';
 import 'package:nutrimatch_mobile/screens/signup_screen.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
@@ -7,6 +7,7 @@ import 'package:nutrimatch_mobile/components/custom_scaffold.dart';
 import 'package:nutrimatch_mobile/components/welcome_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -29,6 +30,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
         IdTokenResult? idTokenResult = await user?.getIdTokenResult();
         if (user != null && idTokenResult?.token != null) {
+          log('idTokenResult: ${idTokenResult?.token}');
           prefs.setString('uid', user.uid);
           prefs.setString('idToken', idTokenResult!.token!);
 
