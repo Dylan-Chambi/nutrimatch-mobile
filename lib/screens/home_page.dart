@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _foodRecommendations = Future.value([]);
     _user = widget.user;
     _foodRecommendations = BackendAPI.getFoodRecommendations();
   }

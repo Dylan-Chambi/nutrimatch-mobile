@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:nutrimatch_mobile/components/product_images.dart';
+import 'package:nutrimatch_mobile/components/food_image.dart';
 import 'package:nutrimatch_mobile/models/food_recommendation.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
 
-class RecommendationDetails extends StatefulWidget {
+class RecommendationDetails extends StatelessWidget {
   const RecommendationDetails({super.key, required this.foodRecommendation});
 
   final FoodRecommendation foodRecommendation;
-
-  @override
-  State<RecommendationDetails> createState() => _RecommendationDetailsState();
-}
-
-class _RecommendationDetailsState extends State<RecommendationDetails> {
-  // food recommendation
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +51,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                 child: Row(
                   children: [
                     Text(
-                      widget.foodRecommendation.generalNutritionalScore
-                          .toString(),
+                      foodRecommendation.generalNutritionalScore.toString(),
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.black,
@@ -82,7 +74,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
       body: ListView(
         padding: const EdgeInsets.only(top: 0),
         children: [
-          ProductImages(foodRecommendation: widget.foodRecommendation),
+          ProductImages(foodRecommendation: foodRecommendation),
           Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
@@ -97,7 +89,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.foodRecommendation.shortFoodName!,
+                          foodRecommendation.shortFoodName!,
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -106,7 +98,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          widget.foodRecommendation.generalRecommendation!,
+                          foodRecommendation.generalRecommendation!,
                           textAlign: TextAlign.justify,
                           style: const TextStyle(
                             fontSize: 16,
@@ -135,8 +127,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                         const SizedBox(height: 10),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount:
-                        widget.foodRecommendation.foodRecommendations!.length,
+                    itemCount: foodRecommendation.foodRecommendations!.length,
                     itemBuilder: (context, index) {
                       return Card(
                         elevation: 0,
@@ -147,7 +138,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.foodRecommendation
+                                foodRecommendation
                                     .foodRecommendations![index].name,
                                 style: const TextStyle(
                                   fontSize: 16,
@@ -175,7 +166,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                         ),
                                         TextSpan(
                                           text:
-                                              '${widget.foodRecommendation.foodRecommendations![index].size} ${widget.foodRecommendation.foodRecommendations![index].sizeUnit}',
+                                              '${foodRecommendation.foodRecommendations![index].size} ${foodRecommendation.foodRecommendations![index].sizeUnit}',
                                         ),
                                       ],
                                     ),
@@ -195,7 +186,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                         ),
                                         TextSpan(
                                           text:
-                                              '${widget.foodRecommendation.foodRecommendations![index].amount}',
+                                              '${foodRecommendation.foodRecommendations![index].amount}',
                                         ),
                                       ],
                                     ),
@@ -222,7 +213,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                         ),
                                         TextSpan(
                                           text:
-                                              '${widget.foodRecommendation.foodRecommendations![index].confidence}',
+                                              '${foodRecommendation.foodRecommendations![index].confidence}',
                                         ),
                                       ],
                                     ),
@@ -242,7 +233,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                         ),
                                         TextSpan(
                                           text:
-                                              '${widget.foodRecommendation.foodRecommendations![index].nutritionalScore}',
+                                              '${foodRecommendation.foodRecommendations![index].nutritionalScore}',
                                         ),
                                       ],
                                     ),
@@ -260,7 +251,7 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                widget.foodRecommendation
+                                foodRecommendation
                                     .foodRecommendations![index].recommendation,
                                 style: TextStyle(
                                   fontSize: 14,
@@ -282,14 +273,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                 spacing: 5,
                                 runSpacing: 5,
                                 children: [
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .calories !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Calories: ${widget.foodRecommendation.foodRecommendations![index].calories} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Calories: ${foodRecommendation.foodRecommendations![index].calories} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -306,14 +295,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .carbohydrates !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Carbohydrates: ${widget.foodRecommendation.foodRecommendations![index].carbohydrates} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Carbohydrates: ${foodRecommendation.foodRecommendations![index].carbohydrates} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -330,14 +317,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .fat !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Fat: ${widget.foodRecommendation.foodRecommendations![index].fat} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Fat: ${foodRecommendation.foodRecommendations![index].fat} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -354,14 +339,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .protein !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Protein: ${widget.foodRecommendation.foodRecommendations![index].protein} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Protein: ${foodRecommendation.foodRecommendations![index].protein} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -378,14 +361,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .fiber !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Fiber: ${widget.foodRecommendation.foodRecommendations![index].fiber} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Fiber: ${foodRecommendation.foodRecommendations![index].fiber} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -402,14 +383,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .sugar !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Sugar: ${widget.foodRecommendation.foodRecommendations![index].sugar} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Sugar: ${foodRecommendation.foodRecommendations![index].sugar} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -426,14 +405,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .sodium !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Sodium: ${widget.foodRecommendation.foodRecommendations![index].sodium} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Sodium: ${foodRecommendation.foodRecommendations![index].sodium} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -450,14 +427,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .vitaminA !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Vitamin A: ${widget.foodRecommendation.foodRecommendations![index].vitaminA} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Vitamin A: ${foodRecommendation.foodRecommendations![index].vitaminA} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -474,14 +449,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .vitaminC !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Vitamin C: ${widget.foodRecommendation.foodRecommendations![index].vitaminC} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Vitamin C: ${foodRecommendation.foodRecommendations![index].vitaminC} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -498,14 +471,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .calcium !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Calcium: ${widget.foodRecommendation.foodRecommendations![index].calcium} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Calcium: ${foodRecommendation.foodRecommendations![index].calcium} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -522,14 +493,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .iron !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Iron: ${widget.foodRecommendation.foodRecommendations![index].iron} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Iron: ${foodRecommendation.foodRecommendations![index].iron} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -546,14 +515,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .cholesterol !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Cholesterol: ${widget.foodRecommendation.foodRecommendations![index].cholesterol} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Cholesterol: ${foodRecommendation.foodRecommendations![index].cholesterol} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
@@ -570,14 +537,12 @@ class _RecommendationDetailsState extends State<RecommendationDetails> {
                                           ),
                                         )
                                       : const SizedBox(),
-                                  widget
-                                              .foodRecommendation
-                                              .foodRecommendations![index]
+                                  foodRecommendation.foodRecommendations![index]
                                               .potassium !=
                                           null
                                       ? Chip(
                                           label: Text(
-                                            'Potassium: ${widget.foodRecommendation.foodRecommendations![index].potassium} ${widget.foodRecommendation.nutritionalInfoUnit}',
+                                            'Potassium: ${foodRecommendation.foodRecommendations![index].potassium} ${foodRecommendation.nutritionalInfoUnit}',
                                             style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,

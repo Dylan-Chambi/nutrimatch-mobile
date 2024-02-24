@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nutrimatch_mobile/models/user_model.dart';
 import 'package:nutrimatch_mobile/screens/home_page.dart';

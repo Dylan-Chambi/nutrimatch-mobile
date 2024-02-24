@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nutrimatch_mobile/models/food_recommendation.dart';
 import 'package:nutrimatch_mobile/utils/images.dart';
 
-class ProductImages extends StatefulWidget {
+class ProductImages extends StatelessWidget {
   const ProductImages({
     super.key,
     required this.foodRecommendation,
@@ -10,11 +10,6 @@ class ProductImages extends StatefulWidget {
 
   final FoodRecommendation foodRecommendation;
 
-  @override
-  State<ProductImages> createState() => _ProductImagesState();
-}
-
-class _ProductImagesState extends State<ProductImages> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,8 +20,7 @@ class _ProductImagesState extends State<ProductImages> {
             bottomLeft: Radius.circular(35), bottomRight: Radius.circular(35)),
       ),
       child: SizedBox(
-        child: loadImageFromUrl(
-            widget.foodRecommendation.imageUrl, BoxFit.fitWidth,
+        child: loadImageFromUrl(foodRecommendation.imageUrl, BoxFit.fitWidth,
             maxHeight: MediaQuery.of(context).size.height * 0.7),
       ),
     );
