@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:nutrimatch_mobile/api/backend_api.dart';
 import 'package:nutrimatch_mobile/models/custom_http_exception.dart';
 import 'package:nutrimatch_mobile/models/food_recommendation.dart';
-// import 'package:nutrimatch_mobile/screens/home_page.dart';
 import 'package:nutrimatch_mobile/screens/recommendation_details.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UploadImage extends StatefulWidget {
   const UploadImage({super.key, required this.imageFile});
@@ -91,26 +89,21 @@ class _UploadImageState extends State<UploadImage> {
                       onPressed: () async {
                         try {
                           showLoaderDialog(context);
-                          final SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          String? idToken = prefs.getString('idToken');
-                          if (idToken != null) {
-                            FoodRecommendation foodRecommendation =
-                                await BackendAPI.getFoodRecommendation(
-                              widget.imageFile,
-                            );
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.pop(context);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RecommendationDetails(
-                                    foodRecommendation: foodRecommendation,
-                                  ),
+                          FoodRecommendation foodRecommendation =
+                              await BackendAPI.getFoodRecommendation(
+                            widget.imageFile,
+                          );
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RecommendationDetails(
+                                  foodRecommendation: foodRecommendation,
                                 ),
-                              );
-                            });
-                          }
+                              ),
+                            );
+                          });
                         } on CustomHTTPException catch (e) {
                           debugPrint('Error: $e');
                           WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -4,23 +4,21 @@ import 'package:http/http.dart' as http;
 import 'package:nutrimatch_mobile/models/food_recommendation.dart';
 import 'package:flutter/material.dart';
 import 'package:nutrimatch_mobile/models/custom_http_exception.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nutrimatch_mobile/services/auth_service.dart';
 
 class BackendAPI {
-  static String backendUrl = 'http://192.168.0.30:3000';
+  static final AuthService _authService = AuthService.instance;
+  static const String _backendUrl = 'http://192.168.0.30:3000';
 
   static Future<List<FoodRecommendation>> getFoodRecommendations() async {
-    debugPrint('getFoodRecommendations called');
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String? idToken = prefs.getString('idToken');
+    String? idToken = _authService.currentUser?.idToken;
 
     if (idToken == null) {
       throw Exception('No idToken found');
     }
 
     var uri =
-        Uri.parse('$backendUrl/api/v1/recommendation/get-recommendations');
+        Uri.parse('$_backendUrl/api/v1/recommendation/get-recommendations');
     final response = await http.get(
       uri,
       headers: <String, String>{
@@ -39,15 +37,13 @@ class BackendAPI {
   }
 
   static Future<dynamic> getFoodRecommendation(File image) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String? idToken = prefs.getString('idToken');
+    String? idToken = _authService.currentUser?.idToken;
 
     if (idToken == null) {
       throw Exception('No idToken found');
     }
 
-    var uri = Uri.parse('$backendUrl/api/v1/food-detection/recommendation');
+    var uri = Uri.parse('$_backendUrl/api/v1/food-detection/recommendation');
     var request = http.MultipartRequest('POST', uri);
 
     request.headers.addAll(<String, String>{

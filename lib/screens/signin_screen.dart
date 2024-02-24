@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:nutrimatch_mobile/screens/signup_screen.dart';
 import 'package:nutrimatch_mobile/components/custom_scaffold.dart';
+import 'package:nutrimatch_mobile/services/auth_service.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -15,6 +14,24 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formSignInKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    AuthService.instance.customOnAuthStateChanged.listen((user) {
+      if (user != null) {
+        if (mounted && Navigator.canPop(context)) {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    AuthService.instance.customOnAuthStateChanged.listen((user) {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +252,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             height: 50.0,
                             child: ElevatedButton(
                               onPressed: () async {
-                                await signInWithGoogle();
+                                await AuthService.instance.signInWithGoogle();
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
@@ -307,27 +324,5 @@ class _SignInScreenState extends State<SignInScreen> {
         ],
       ),
     );
-  }
-
-  Future<void> signInWithGoogle() async {
-    try {
-      // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      // Once signed in, return the UserCredential
-      await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {
-      debugPrint('Error: $e');
-    }
   }
 }

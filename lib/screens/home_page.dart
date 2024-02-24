@@ -5,64 +5,35 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nutrimatch_mobile/api/backend_api.dart';
 import 'package:nutrimatch_mobile/components/recommendation_card.dart';
 import 'package:nutrimatch_mobile/models/food_recommendation.dart';
+import 'package:nutrimatch_mobile/models/user_model.dart';
 import 'package:nutrimatch_mobile/screens/upload_image.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:nutrimatch_mobile/screens/welcome_screen.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:developer';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required this.user});
+  final UserModel user;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final picker = ImagePicker();
 
   final db = FirebaseFirestore.instance;
 
-  User? _user;
-
-  late Future<List<FoodRecommendation>> foodRecommendations;
+  late UserModel _user;
+  late Future<List<FoodRecommendation>> _foodRecommendations;
 
   @override
   void initState() {
     super.initState();
-    _auth.authStateChanges().listen((user) async {
-      if (user == null) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-            (route) => false);
-      }
-
-      IdTokenResult? idTokenResult = await user?.getIdTokenResult();
-      if (user != null && idTokenResult?.token != null) {
-        log('idTokenResult: ${idTokenResult?.token}');
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('uid', user.uid);
-        prefs.setString('idToken', idTokenResult!.token!);
-      }
-      setState(() {
-        _user = user;
-      });
-    });
-    _auth.idTokenChanges().listen((event) async {
-      if (event == null) {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.remove('uid');
-        prefs.remove('idToken');
-      }
-    });
-    debugPrint('Getting food recommendations');
-    foodRecommendations = Future.value([]);
-    // foodRecommendations = BackendAPI.getFoodRecommendations();
+    _foodRecommendations = Future.value([]);
+    _user = widget.user;
+    _foodRecommendations = BackendAPI.getFoodRecommendations();
   }
 
   @override
@@ -79,10 +50,10 @@ class _HomePageState extends State<HomePage> {
                   image: AssetImage('lib/assets/images/drawer_header.jpg'),
                   fit: BoxFit.cover,
                 )),
-                accountName: Text(_user?.displayName ?? ''),
-                accountEmail: Text(_user?.email ?? ''),
+                accountName: Text(_user.displayName),
+                accountEmail: Text(_user.email),
                 currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(_user?.photoURL ?? ''),
+                  backgroundImage: NetworkImage(_user.photoURL),
                 ),
               ),
               ListTile(
@@ -183,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                       removeTop: true,
                       child: Center(
                         child: FutureBuilder<List<FoodRecommendation>>(
-                          future: foodRecommendations,
+                          future: _foodRecommendations,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return ListView.separated(

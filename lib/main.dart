@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nutrimatch_mobile/screens/welcome_screen.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
+import 'package:nutrimatch_mobile/tree/auth_tree.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -44,7 +44,7 @@ class NutriMatchApp extends StatelessWidget {
       title: 'NutriMatch',
       theme: lightMode,
       debugShowCheckedModeBanner: false,
-      home: const WelcomeScreen(),
+      home: const AuthWidgetTree(),
     );
   }
 }
