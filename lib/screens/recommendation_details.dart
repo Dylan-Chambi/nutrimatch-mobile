@@ -3,48 +3,6 @@ import 'package:nutrimatch_mobile/components/product_images.dart';
 import 'package:nutrimatch_mobile/models/food_recommendation.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
 
-// class FoodRecommendation {
-//   final String id;
-//   final bool validUserInput;
-//   final String? errorMessage;
-//   final String? shortFoodName;
-//   final String? generalDescription;
-//   final String? generalRecommendation;
-//   final int? generalNutritionalScore;
-//   final String? nutritionalInfoUnit;
-//   final List<FoodRecommendationItem>? foodRecommendations;
-//   final DateTime timestamp;
-//   final String? imageUrl;
-// }
-
-// class FoodRecommendationItem {
-//   final String name;
-//   final int size;
-//   final String sizeUnit;
-//   final int amount;
-//   final double confidence;
-//   final List<String>? seasonings;
-//   final List<String>? ingredients;
-//   final String recommendation;
-//   final int nutritionalScore;
-//   final int? calories;
-//   final int? carbohydrates;
-//   final int? fat;
-//   final int? protein;
-//   final int? fiber;
-//   final int? sugar;
-//   final int? sodium;
-//   final int? vitaminA;
-//   final int? vitaminC;
-//   final int? calcium;
-//   final int? iron;
-//   final int? cholesterol;
-//   final int? potassium;
-//   final String? warning;
-//   final String? alternativeRecommendation;
-//   final int? alternativeNutritionalScore;
-// }
-
 class RecommendationDetails extends StatefulWidget {
   const RecommendationDetails({super.key, required this.foodRecommendation});
 

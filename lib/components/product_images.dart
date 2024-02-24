@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nutrimatch_mobile/models/food_recommendation.dart';
+import 'package:nutrimatch_mobile/utils/images.dart';
 
 class ProductImages extends StatefulWidget {
   const ProductImages({
@@ -24,10 +25,9 @@ class _ProductImagesState extends State<ProductImages> {
             bottomLeft: Radius.circular(35), bottomRight: Radius.circular(35)),
       ),
       child: SizedBox(
-        child: Image.network(
-          widget.foodRecommendation.imageUrl!,
-          fit: BoxFit.fitWidth,
-        ),
+        child: loadImageFromUrl(
+            widget.foodRecommendation.imageUrl, BoxFit.fitWidth,
+            maxHeight: MediaQuery.of(context).size.height * 0.7),
       ),
     );
   }

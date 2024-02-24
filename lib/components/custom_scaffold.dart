@@ -6,34 +6,28 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Image.asset(
-            'lib/assets/images/welcome_bg.jpg',
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/assets/images/welcome_bg.jpg'),
             fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
           ),
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(
-                      0.8), // Ajusta el nivel de opacidad según tu preferencia
-                ],
-              ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent,
+                Colors.black.withOpacity(0.8),
+              ],
             ),
-            width: double.infinity,
-            height: double.infinity,
           ),
-          Container(
-            //an alternative to use SafeArea is to use
+          child: SafeArea(
             child: child!,
           ),
-        ],
+        ),
       ),
     );
   }

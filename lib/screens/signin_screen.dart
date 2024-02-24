@@ -22,7 +22,6 @@ class _SignInScreenState extends State<SignInScreen> {
       child: Column(
         children: [
           Expanded(
-            flex: 7,
             child: Container(
               margin: const EdgeInsets.only(
                 top: 100.0,

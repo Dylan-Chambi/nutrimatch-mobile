@@ -43,6 +43,7 @@ class NutriMatchApp extends StatelessWidget {
     return MaterialApp(
       title: 'NutriMatch',
       theme: lightMode,
+      debugShowCheckedModeBanner: false,
       home: const WelcomeScreen(),
     );
   }

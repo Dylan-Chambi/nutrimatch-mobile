@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:nutrimatch_mobile/models/food_recommendation.dart';
 import 'package:nutrimatch_mobile/screens/recommendation_details.dart';
+import 'package:nutrimatch_mobile/utils/images.dart';
 
 class RecommendationCard extends StatelessWidget {
   const RecommendationCard({super.key, required this.foodRecommendation});
@@ -30,20 +31,16 @@ class RecommendationCard extends StatelessWidget {
         ),
         child: IntrinsicHeight(
           child: Row(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Expanded(
-                child: Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Image.network(
-                    foodRecommendation.imageUrl!,
-                    fit: BoxFit.cover,
-                    height: 120,
-                    width: 120,
-                  ),
+              Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                child: loadImageFromUrl(
+                    foodRecommendation.imageUrl, BoxFit.cover,
+                    height: 120, width: 120),
               ),
               const VerticalDivider(
                 color: Colors.grey,

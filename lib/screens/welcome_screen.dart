@@ -96,46 +96,41 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           SafeArea(
             child: Container(
               margin: const EdgeInsets.only(bottom: 30.0),
-              child: Flexible(
-                flex: 1,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: WelcomeButton(
-                          buttonText: 'Sign in',
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SignInScreen()));
-                          },
-                          color: Colors.transparent,
-                          textColor: Colors.white,
-                        ),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: WelcomeButton(
+                        buttonText: 'Sign in',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignInScreen()));
+                        },
+                        color: Colors.transparent,
+                        textColor: Colors.white,
                       ),
-                      Expanded(
-                        child: WelcomeButton(
-                          buttonText: 'Sign up',
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SignUpScreen()));
-                          },
-                          color: Colors.white,
-                          textColor: lightColorScheme.primary,
-                        ),
+                    ),
+                    Expanded(
+                      child: WelcomeButton(
+                        buttonText: 'Sign up',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignUpScreen()));
+                        },
+                        color: Colors.white,
+                        textColor: lightColorScheme.primary,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
