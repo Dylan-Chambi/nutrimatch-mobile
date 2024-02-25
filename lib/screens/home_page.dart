@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage>
     _foodRecommendations = BackendAPI.getFoodRecommendations();
   }
 
-  void updateRecommendations() {
+  void updateRecommendationsLoading() {
     setState(() {
       _isLoading = true;
     });
@@ -53,6 +53,13 @@ class _HomePageState extends State<HomePage>
         _isLoading = false;
       });
     });
+  }
+
+  Future<void> updateRecommendationsRefresh() {
+    setState(() {
+      _foodRecommendations = BackendAPI.getFoodRecommendations();
+    });
+    return _foodRecommendations;
   }
 
   @override
@@ -96,6 +103,7 @@ class _HomePageState extends State<HomePage>
         children: [
           AppBar(
             backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
             elevation: 0,
             leading: Builder(
               builder: (BuildContext context) {
@@ -138,7 +146,7 @@ class _HomePageState extends State<HomePage>
           ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
               decoration: const BoxDecoration(
                 color: Color(0xFFf2f2f2),
                 borderRadius: BorderRadius.only(
@@ -186,16 +194,26 @@ class _HomePageState extends State<HomePage>
                                       .toLowerCase()
                                       .contains(searchBarText.toLowerCase()))
                                   .toList();
-                              return ListView.separated(
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(height: 10),
-                                itemCount: filteredRecommendations.length,
-                                itemBuilder: (context, index) {
-                                  return RecommendationCard(
-                                    foodRecommendation:
-                                        filteredRecommendations[index],
-                                  );
+                              return RefreshIndicator(
+                                onRefresh: updateRecommendationsRefresh,
+                                backgroundColor: Colors.white,
+                                color: lightColorScheme.primary,
+                                notificationPredicate: (notification) {
+                                  return notification.depth == 0;
                                 },
+                                child: ListView.separated(
+                                  physics: const BouncingScrollPhysics(),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(height: 15),
+                                  itemCount: filteredRecommendations.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return RecommendationCard(
+                                      foodRecommendation:
+                                          filteredRecommendations[index],
+                                    );
+                                  },
+                                ),
                               );
                             } else if (snapshot.hasError) {
                               return const Text(
@@ -394,7 +412,7 @@ class _HomePageState extends State<HomePage>
           MaterialPageRoute(
             builder: (context) => UploadImage(
                 imageFile: File(croppedFile.path),
-                callback: updateRecommendations),
+                callback: updateRecommendationsLoading),
           ),
         );
       });
