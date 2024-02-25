@@ -25,7 +25,7 @@ class BackendAPI {
         'accept': 'application/json',
         'Authorization': 'Bearer $idToken',
       },
-    );
+    ).timeout(const Duration(seconds: 20));
 
     if (response.statusCode == 200) {
       List<FoodRecommendation> foodRecommendations =
@@ -60,7 +60,7 @@ class BackendAPI {
       filename: image.path.split('/').last,
     ));
 
-    var response = await request.send();
+    var response = await request.send().timeout(const Duration(seconds: 120));
     var responseString = await response.stream.bytesToString();
     debugPrint(responseString);
     if (response.statusCode == 200) {
