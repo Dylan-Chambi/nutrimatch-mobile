@@ -28,6 +28,8 @@ class _HomePageState extends State<HomePage> {
   late UserModel _user;
   late Future<List<FoodRecommendation>> _foodRecommendations;
 
+  String searchBarText = '';
+
   @override
   void initState() {
     super.initState();
@@ -137,7 +139,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                     clipBehavior: Clip.hardEdge,
                     child: TextFormField(
-                      // onChanged: onFoodRecommendationSearch,
+                      onChanged: (value) {
+                        setState(() {
+                          searchBarText = value;
+                        });
+                      },
                       decoration: const InputDecoration(
                         hintText: 'Search for recommendations',
                         prefixIcon: Icon(Icons.search),
@@ -156,13 +162,20 @@ class _HomePageState extends State<HomePage> {
                           future: _foodRecommendations,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
+                              final filteredRecommendations = snapshot.data!
+                                  .where((recommendation) => recommendation
+                                      .shortFoodName!
+                                      .toLowerCase()
+                                      .contains(searchBarText.toLowerCase()))
+                                  .toList();
                               return ListView.separated(
                                 separatorBuilder: (context, index) =>
                                     const SizedBox(height: 10),
-                                itemCount: snapshot.data!.length,
+                                itemCount: filteredRecommendations.length,
                                 itemBuilder: (context, index) {
                                   return RecommendationCard(
-                                    foodRecommendation: snapshot.data![index],
+                                    foodRecommendation:
+                                        filteredRecommendations[index],
                                   );
                                 },
                               );
