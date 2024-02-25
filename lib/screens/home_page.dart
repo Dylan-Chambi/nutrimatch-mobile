@@ -42,6 +42,15 @@ class _HomePageState extends State<HomePage>
     _foodRecommendations = BackendAPI.getFoodRecommendations();
   }
 
+  @override
+  void didChangeDependencies() {
+    // Adjust the provider based on the image type
+    precacheImage(
+        const AssetImage('lib/assets/images/drawer_header.jpg'), context);
+    precacheImage(NetworkImage(_user.photoURL), context);
+    super.didChangeDependencies();
+  }
+
   void updateRecommendationsLoading() {
     setState(() {
       _isLoading = true;
