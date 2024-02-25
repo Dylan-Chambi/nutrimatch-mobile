@@ -4,9 +4,11 @@ import 'package:nutrimatch_mobile/models/food_recommendation.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
 
 class RecommendationDetails extends StatelessWidget {
-  const RecommendationDetails({super.key, required this.foodRecommendation});
+  const RecommendationDetails(
+      {super.key, required this.foodRecommendation, this.callback});
 
   final FoodRecommendation foodRecommendation;
+  final Function? callback;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,9 @@ class RecommendationDetails extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
+              if (callback != null) {
+                callback!();
+              }
             },
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),

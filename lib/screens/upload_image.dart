@@ -7,9 +7,10 @@ import 'package:nutrimatch_mobile/screens/recommendation_details.dart';
 import 'package:nutrimatch_mobile/theme/theme.dart';
 
 class UploadImage extends StatefulWidget {
-  const UploadImage({super.key, required this.imageFile});
+  const UploadImage({super.key, required this.imageFile, this.callback});
 
   final File imageFile;
+  final Function? callback;
 
   @override
   State<UploadImage> createState() => _UploadImageState();
@@ -100,6 +101,7 @@ class _UploadImageState extends State<UploadImage> {
                               MaterialPageRoute(
                                 builder: (context) => RecommendationDetails(
                                   foodRecommendation: foodRecommendation,
+                                  callback: widget.callback,
                                 ),
                               ),
                             );

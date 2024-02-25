@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   late UserModel _user;
   late Future<List<FoodRecommendation>> _foodRecommendations;
+  bool _isLoading = false;
 
   String searchBarText = '';
 
@@ -35,6 +36,19 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _user = widget.user;
     _foodRecommendations = BackendAPI.getFoodRecommendations();
+  }
+
+  void updateRecommendations() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    BackendAPI.getFoodRecommendations().then((value) {
+      setState(() {
+        _foodRecommendations = Future.value(value);
+        _isLoading = false;
+      });
+    });
   }
 
   @override
@@ -161,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                         child: FutureBuilder<List<FoodRecommendation>>(
                           future: _foodRecommendations,
                           builder: (context, snapshot) {
-                            if (snapshot.hasData) {
+                            if (snapshot.hasData && !_isLoading) {
                               final filteredRecommendations = snapshot.data!
                                   .where((recommendation) => recommendation
                                       .shortFoodName!
@@ -330,15 +344,13 @@ class _HomePageState extends State<HomePage> {
         ]);
     if (croppedFile != null) {
       imageCache.clear();
-      // setState(() {
-      //   imageFile = File(croppedFile.path);
-      // });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                UploadImage(imageFile: File(croppedFile.path)),
+            builder: (context) => UploadImage(
+                imageFile: File(croppedFile.path),
+                callback: updateRecommendations),
           ),
         );
       });
