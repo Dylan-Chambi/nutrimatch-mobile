@@ -11,6 +11,7 @@ import 'package:nutrimatch_mobile/theme/theme.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:speed_dial_fab/speed_dial_fab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.user});
@@ -20,13 +21,15 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final picker = ImagePicker();
 
   final db = FirebaseFirestore.instance;
 
   late UserModel _user;
   late Future<List<FoodRecommendation>> _foodRecommendations;
+
   bool _isLoading = false;
 
   String searchBarText = '';
@@ -210,13 +213,26 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: lightColorScheme.primary,
-        tooltip: 'Add a new food recommendation',
-        onPressed: () {
-          showImagePicker(context);
-        },
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+      floatingActionButton: SpeedDialFabWidget(
+        primaryIconCollapse: Icons.add,
+        primaryIconExpand: Icons.add,
+        rotateAngle: 0,
+        secondaryIconsList: const [
+          Icons.image,
+          Icons.camera_alt,
+        ],
+        secondaryIconsText: const [
+          "Gallery",
+          "Camera",
+        ],
+        secondaryIconsOnPress: [
+          () => _imgFromGallery(),
+          () => _imgFromCamera(),
+        ],
+        secondaryBackgroundColor: Colors.white,
+        secondaryForegroundColor: lightColorScheme.primary,
+        primaryBackgroundColor: lightColorScheme.primary,
+        primaryForegroundColor: Colors.white,
       ),
     );
   }
@@ -246,72 +262,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void showImagePicker(BuildContext context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (builder) {
-          return Card(
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 5.2,
-                margin: const EdgeInsets.only(top: 8.0),
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: InkWell(
-                      child: const Column(
-                        children: [
-                          Icon(
-                            Icons.image,
-                            size: 60.0,
-                          ),
-                          SizedBox(height: 12.0),
-                          Text(
-                            "Gallery",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16, color: Colors.black),
-                          )
-                        ],
-                      ),
-                      onTap: () {
-                        _imgFromGallery();
-                        Navigator.pop(context);
-                      },
-                    )),
-                    Expanded(
-                        child: InkWell(
-                      child: const SizedBox(
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.camera_alt,
-                              size: 60.0,
-                            ),
-                            SizedBox(height: 12.0),
-                            Text(
-                              "Camera",
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        _imgFromCamera();
-                        Navigator.pop(context);
-                      },
-                    ))
-                  ],
-                )),
-          );
-        });
-  }
-
   _cropImage(File imgFile) async {
-    const String title = 'Resize to fit your food';
+    const String title = 'Crop to fit your food';
     final croppedFile = await ImageCropper().cropImage(
         sourcePath: imgFile.path,
         aspectRatioPresets: Platform.isAndroid
