@@ -311,6 +311,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _cropImage(File imgFile) async {
+    const String title = 'Resize to fit your food';
     final croppedFile = await ImageCropper().cropImage(
         sourcePath: imgFile.path,
         aspectRatioPresets: Platform.isAndroid
@@ -333,13 +334,16 @@ class _HomePageState extends State<HomePage> {
               ],
         uiSettings: [
           AndroidUiSettings(
-              toolbarTitle: "Image Cropper",
-              toolbarColor: Colors.deepOrange,
-              toolbarWidgetColor: Colors.white,
+              toolbarTitle: title,
+              toolbarColor: Colors.white,
+              toolbarWidgetColor: lightColorScheme.primary,
+              activeControlsWidgetColor: lightColorScheme.primary,
+              dimmedLayerColor: Colors.black.withOpacity(0.5),
+              backgroundColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.original,
               lockAspectRatio: false),
           IOSUiSettings(
-            title: "Image Cropper",
+            title: title,
           )
         ]);
     if (croppedFile != null) {
