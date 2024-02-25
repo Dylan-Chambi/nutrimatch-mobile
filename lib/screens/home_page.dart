@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nutrimatch_mobile/api/backend_api.dart';
 import 'package:nutrimatch_mobile/components/recommendation_card.dart';
+import 'package:nutrimatch_mobile/components/speed_dial_fab.dart';
 import 'package:nutrimatch_mobile/models/food_recommendation.dart';
 import 'package:nutrimatch_mobile/models/user_model.dart';
 import 'package:nutrimatch_mobile/screens/upload_image.dart';
@@ -11,7 +12,7 @@ import 'package:nutrimatch_mobile/theme/theme.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:speed_dial_fab/speed_dial_fab.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.user});
@@ -229,8 +230,8 @@ class _HomePageState extends State<HomePage>
           () => _imgFromGallery(),
           () => _imgFromCamera(),
         ],
-        secondaryBackgroundColor: Colors.white,
-        secondaryForegroundColor: lightColorScheme.primary,
+        secondaryBackgroundColor: lightColorScheme.secondary,
+        secondaryForegroundColor: Colors.white,
         primaryBackgroundColor: lightColorScheme.primary,
         primaryForegroundColor: Colors.white,
       ),
@@ -249,6 +250,15 @@ class _HomePageState extends State<HomePage>
       if (value != null) {
         _cropImage(File(value.path));
       }
+    }).catchError((e) async {
+      debugPrint(e.toString());
+      PermissionStatus status = await Permission.photos.status;
+      if (status.isDenied) {
+        await Permission.photos.request();
+      } else if (status.isPermanentlyDenied) {
+        showPermissionDenyDialog('Photos Permission Denied',
+            'Please allow access to your photos to select a photo.');
+      }
     });
   }
 
@@ -259,7 +269,85 @@ class _HomePageState extends State<HomePage>
       if (value != null) {
         _cropImage(File(value.path));
       }
+    }).catchError((e) async {
+      PermissionStatus status = await Permission.camera.status;
+      if (status.isDenied || status.isPermanentlyDenied) {
+        showPermissionDenyDialog('Camera Permission Denied',
+            'Please allow access to your camera to take a photo.');
+      }
     });
+  }
+
+  showPermissionDenyDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
+          actionsPadding: const EdgeInsets.only(
+            right: 20,
+            bottom: 10,
+            top: 10,
+          ),
+          title: Text(
+            title,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                content,
+                style: const TextStyle(color: Colors.black),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.red,
+                surfaceTintColor: Colors.white,
+                fixedSize: const Size(80, 40),
+                shadowColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                elevation: 0,
+              ),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                openAppSettings();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: lightColorScheme.primary,
+                surfaceTintColor: Colors.white,
+                fixedSize: const Size(80, 40),
+                shadowColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                elevation: 0,
+              ),
+              child: const Text(
+                'Settings',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   _cropImage(File imgFile) async {

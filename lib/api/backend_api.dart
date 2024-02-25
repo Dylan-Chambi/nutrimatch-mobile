@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:nutrimatch_mobile/models/custom_http_exception.dart';
 import 'package:nutrimatch_mobile/services/auth_service.dart';
 
+const bool isProduction = bool.fromEnvironment('dart.vm.product');
+
 class BackendAPI {
   static final AuthService _authService = AuthService.instance;
-  static const String _backendUrl = 'http://192.168.0.30:3000';
+  static const String _backendUrl = 'https://nutrimatch-backend.onrender.com';
 
   static Future<List<FoodRecommendation>> getFoodRecommendations() async {
     String? idToken = _authService.currentUser?.idToken;
@@ -25,7 +27,7 @@ class BackendAPI {
         'accept': 'application/json',
         'Authorization': 'Bearer $idToken',
       },
-    ).timeout(const Duration(seconds: 20));
+    ).timeout(const Duration(seconds: 60));
 
     if (response.statusCode == 200) {
       List<FoodRecommendation> foodRecommendations =
