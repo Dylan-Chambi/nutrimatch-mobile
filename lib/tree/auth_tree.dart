@@ -22,6 +22,9 @@ class _AuthWidgetTreeState extends State<AuthWidgetTree> {
               ? HomePage(user: snapshot.data!)
               : const WelcomeScreen();
         } else {
+          if (snapshot.hasError) {
+            return const WelcomeScreen();
+          }
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),

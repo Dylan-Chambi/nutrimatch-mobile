@@ -18,24 +18,32 @@ class AuthService {
 
   Stream<UserModel?> get customOnAuthStateChanged {
     return _auth.authStateChanges().transform(
-      StreamTransformer<User?, UserModel?>.fromHandlers(
-        handleData: (User? user, EventSink<UserModel?> sink) async {
-          if (user != null) {
-            currentUser = UserModel(
-              id: user.uid,
-              email: user.email!,
-              displayName: user.displayName ?? '',
-              photoURL: user.photoURL ?? '',
-              idToken: await user.getIdToken(),
-            );
-            sink.add(currentUser);
-          } else {
-            currentUser = null;
-            sink.add(null);
-          }
-        },
-      ),
-    );
+          StreamTransformer<User?, UserModel?>.fromHandlers(
+            handleData: (User? user, EventSink<UserModel?> sink) async {
+              if (user != null) {
+                currentUser = UserModel(
+                  id: user.uid,
+                  email: user.email!,
+                  displayName: user.displayName ?? '',
+                  photoURL: user.photoURL ?? '',
+                  idToken: await user.getIdToken(),
+                );
+                sink.add(currentUser);
+              } else {
+                currentUser = null;
+                sink.add(null);
+              }
+            },
+            handleError: (Object error, StackTrace stackTrace,
+                EventSink<UserModel?> sink) {
+              debugPrint('Error: $error');
+              sink.addError(error, stackTrace);
+            },
+            handleDone: (EventSink<UserModel?> sink) {
+              sink.close();
+            },
+          ),
+        );
   }
 
   Future<UserModel> signInWithGoogle() async {

@@ -464,9 +464,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
 <<<<<<< HEAD
+<<<<<<< HEAD
     version: "1.11.0"
 =======
     version: "1.10.0"
+=======
+    version: "1.11.0"
+>>>>>>> 10dcb90 (Edit, Retake and Select Again buttons implementation and some restyling)
   mime:
     dependency: transitive
     description:
