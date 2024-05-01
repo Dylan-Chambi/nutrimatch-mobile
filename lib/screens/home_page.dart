@@ -191,26 +191,25 @@ class _HomePageState extends State<HomePage>
                     child: MediaQuery.removePadding(
                       context: context,
                       removeTop: true,
-                      child: Center(
-                        child: FutureBuilder<List<FoodRecommendation>>(
-                          future: _foodRecommendations,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData && !_isLoading) {
-                              final filteredRecommendations = snapshot.data!
-                                  .where((recommendation) => recommendation
-                                      .shortFoodName!
-                                      .toLowerCase()
-                                      .contains(searchBarText.toLowerCase()))
-                                  .toList();
-                              return RefreshIndicator(
-                                onRefresh: updateRecommendationsRefresh,
-                                backgroundColor: Colors.white,
-                                color: lightColorScheme.primary,
-                                notificationPredicate: (notification) {
-                                  return notification.depth == 0;
-                                },
+                      child: FutureBuilder<List<FoodRecommendation>>(
+                        future: _foodRecommendations,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData && !_isLoading) {
+                            final filteredRecommendations = snapshot.data!
+                                .where((recommendation) => recommendation
+                                    .shortFoodName!
+                                    .toLowerCase()
+                                    .contains(searchBarText.toLowerCase()))
+                                .toList();
+                            return RefreshIndicator(
+                              onRefresh: updateRecommendationsRefresh,
+                              backgroundColor: Colors.white,
+                              color: lightColorScheme.primary,
+                              child: Container(
+                                constraints: const BoxConstraints.expand(),
                                 child: ListView.separated(
-                                  physics: const BouncingScrollPhysics(),
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(height: 15),
                                   itemCount: filteredRecommendations.length,
@@ -222,15 +221,15 @@ class _HomePageState extends State<HomePage>
                                     );
                                   },
                                 ),
-                              );
-                            } else if (snapshot.hasError) {
-                              return const Text(
-                                  'Could not load recommendations');
-                            } else {
-                              return const CircularProgressIndicator();
-                            }
-                          },
-                        ),
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Text('Could not load recommendations');
+                          } else {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                        },
                       ),
                     ),
                   ),
