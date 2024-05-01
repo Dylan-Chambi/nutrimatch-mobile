@@ -10,7 +10,8 @@ const bool isProduction = bool.fromEnvironment('dart.vm.product');
 
 class BackendAPI {
   static final AuthService _authService = AuthService.instance;
-  static const String _backendUrl = 'https://nutrimatch-backend.onrender.com';
+  // static const String _backendUrl = 'https://nutrimatch-backend.onrender.com';
+  static const String _backendUrl = 'http://10.0.2.2:3000';
 
   static Future<List<FoodRecommendation>> getFoodRecommendations() async {
     String? idToken = _authService.currentUser?.idToken;
