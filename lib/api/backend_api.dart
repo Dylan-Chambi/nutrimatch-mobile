@@ -10,7 +10,6 @@ const bool isProduction = bool.fromEnvironment('dart.vm.product');
 
 class BackendAPI {
   static final AuthService _authService = AuthService.instance;
-  // static const String _backendUrl = 'https://nutrimatch-backend.onrender.com';
   static const String _backendUrl = 'http://10.0.2.2:3000';
 
   static Future<List<FoodRecommendation>> getFoodRecommendations() async {
@@ -46,7 +45,7 @@ class BackendAPI {
       throw Exception('No idToken found');
     }
 
-    var uri = Uri.parse('$_backendUrl/api/v1/food-detection/recommendation');
+    var uri = Uri.parse('$_backendUrl/api/v1/prediction/recommendation');
     var request = http.MultipartRequest('POST', uri);
 
     request.headers.addAll(<String, String>{

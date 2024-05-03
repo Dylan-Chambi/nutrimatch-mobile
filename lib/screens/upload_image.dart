@@ -374,6 +374,12 @@ class _UploadImageState extends State<UploadImage> {
                         Navigator.pop(context); // Remove this line
                         showErrorDialog(context, e.detail);
                       });
+                    } catch (e) {
+                      debugPrint('Error: $e');
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Navigator.pop(context); // Remove this line
+                        showErrorDialog(context, 'An error occurred');
+                      });
                     }
                   },
                   style: ElevatedButton.styleFrom(
